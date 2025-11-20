@@ -120,3 +120,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+h1 {
+  @apply text-5xl font-bold;
+  @apply m-4;
+}

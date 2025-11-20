@@ -2,7 +2,7 @@
 
 import { ThemeProvider } from "@/components/theme-provide";
 import { SessionProvider } from "next-auth/react";
-import { MenuBar } from "./menu-bar";
+import { MenuBar } from "../components/menuBar";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (

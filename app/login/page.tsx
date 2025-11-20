@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react"; // This is the magic function!
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,8 @@ export default function LoginPage() {
   const [error, setError] = useState("");
 
   const router = useRouter(); // To redirect after login
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   // This function will be called when the form is submitted
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,13 +32,14 @@ export default function LoginPage() {
         redirect: false,
         username: email,
         password: password,
+        callbackUrl,
       });
 
       // 3. Check if the sign-in was successful
-      if (result?.ok) {
+      if (result?.ok && result.url) {
         // Login was successful!
         // Redirect to a protected page (e.g., a dashboard)
-        router.push("/dashboard");
+        router.push(result.url);
       } else {
         // Login failed. 'result.error' will contain the error message.
         setError("Invalid email or password. Please try again.");
@@ -50,7 +53,7 @@ export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen min-w-screen z-0">
       <div style={{ width: "100%", height: "100%", position: "absolute" }}>
-        <LiquidEther
+        {/* <LiquidEther
           colors={["#5227FF", "#FF9FFC", "#B19EEF"]}
           mouseForce={20}
           cursorSize={100}
@@ -66,7 +69,7 @@ export default function LoginPage() {
           takeoverDuration={0.25}
           autoResumeDelay={3000}
           autoRampDuration={0.6}
-        />
+        /> */}
       </div>
       <Card className="w-120 max-w-screen p-10 z-10">
         <h1>Login</h1>

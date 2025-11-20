@@ -17,7 +17,7 @@ import {useSession, signIn, signOut} from "next-auth/react";
 export function MenuBar() {
     const { data: session } = useSession();
     return (
-        <nav className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+        <nav className="top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
             <div className="flex h-16 justify-between px-8">
                 <Link href="/" className="flex items-center text-lg font-bold">
                     FlavorForge
