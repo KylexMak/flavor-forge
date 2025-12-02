@@ -5,7 +5,6 @@ import { Separator } from "@/components/ui/separator";
 async function fetchData() {
   try {
     const response = await GET();
-    console.log(response);
     const result = await response.json();
     return result;
   } catch (error) {
@@ -15,7 +14,6 @@ async function fetchData() {
 
 const page = async () => {
   const data = await fetchData();
-  console.log(data);
 
   return (
     <>
