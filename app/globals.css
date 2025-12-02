@@ -123,5 +123,5 @@
 
 h1 {
   @apply text-5xl font-bold;
-  @apply m-4;
+  @apply my-4;
 }

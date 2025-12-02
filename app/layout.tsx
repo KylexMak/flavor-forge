@@ -26,12 +26,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="bg-background text-foreground">
+      <body className="bg-background text-foreground overflow-hidden">
         <Providers>
-          <MenuBar />
-          <main>
-            {children}
-          </main>
+          <div className="flex flex-col h-screen overflow-hidden">
+            <MenuBar className="shrink-0" />
+            <main className="flex-1 overflow-y-auto">{children}</main>
+          </div>
         </Providers>
       </body>
     </html>

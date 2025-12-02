@@ -9,6 +9,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import LiquidEther from "@/components/LiquidEther";
+import styles from "./styles.module.css";
 
 export default function LoginPage() {
   // Form state
@@ -51,28 +52,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen min-w-screen z-0">
-      <div style={{ width: "100%", height: "100%", position: "absolute" }}>
-        {/* <LiquidEther
-          colors={["#5227FF", "#FF9FFC", "#B19EEF"]}
-          mouseForce={20}
-          cursorSize={100}
-          isViscous={false}
-          viscous={30}
-          iterationsViscous={32}
-          iterationsPoisson={32}
-          resolution={0.5}
-          isBounce={false}
-          autoDemo={true}
-          autoSpeed={0.5}
-          autoIntensity={2.2}
-          takeoverDuration={0.25}
-          autoResumeDelay={3000}
-          autoRampDuration={0.6}
-        /> */}
-      </div>
+    <div className="flex items-center justify-center min-w-screen min-h-full z-0">
       <Card className="w-120 max-w-screen p-10 z-10">
-        <h1>Login</h1>
+        <h1 className={styles.cardHeader}>Login</h1>
         <form onSubmit={handleSubmit}>
           {/* Display an error message if login fails */}
           {error && <p style={{ color: "red" }}>{error}</p>}
@@ -90,7 +72,7 @@ export default function LoginPage() {
               />
             </Field>
             <Field>
-              <FieldLabel htmlFor="password">Email</FieldLabel>
+              <FieldLabel htmlFor="password">Password</FieldLabel>
               <Input
                 id="password"
                 type="password"
