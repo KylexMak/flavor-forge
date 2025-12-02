@@ -1,4 +1,4 @@
-import PantryTable from "@/components/pantryTable";
+import IngredientTable from "@/components/ingredientTable";
 import AddIngredientsForm from "@/components/ui/add-ingredients-form";
 import { GET } from "../api/pantry/route";
 
@@ -27,7 +27,7 @@ const page = async () => {
         </span>
         <div className="flex flex-col items-center">
           <AddIngredientsForm />
-          <PantryTable data={data.items} className="w-full" />
+          <IngredientTable data={data.items} className="w-full" />
         </div>
       </div>
     </>

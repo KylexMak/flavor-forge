@@ -13,6 +13,9 @@ import {
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { Button } from "./ui/button";
+
+import { LogInIcon, LogOutIcon } from "lucide-react";
 
 type Props = {
   className?: string;
@@ -28,7 +31,8 @@ export function MenuBar(props: Props) {
     <nav className={navClassName}>
       <div className="flex h-16 justify-between px-8">
         <Link href="/" className="flex items-center text-lg font-bold">
-          FlavorForge
+          <img className="h-10 mr-3" src="flavor_forge.svg"></img>
+          <span>FlavorForge</span>
         </Link>
 
         <NavigationMenu>
@@ -43,24 +47,26 @@ export function MenuBar(props: Props) {
                 </NavigationMenuItem>
                 <NavigationMenuItem>
                   {/* Show a "Log Out" button */}
-                  <button
+                  <Button
                     onClick={() => signOut({ callbackUrl: "/" })}
-                    className="w-20 text-center text-sm font-medium text-foreground"
+                    className="flex flex-row items-center gap-2"
+                    variant="outline"
                   >
-                    Log Out
-                  </button>
+                    <LogOutIcon /> Log Out
+                  </Button>
                 </NavigationMenuItem>
               </>
             ) : (
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
                   {/* Show a "Log In" button */}
-                  <button
+                  <Button
                     onClick={() => signIn()}
-                    className="w-20 text-center text-sm font-medium text-foreground"
+                    className="flex flex-row items-center gap-2"
+                    variant="outline"
                   >
-                    Log In
-                  </button>
+                    <LogInIcon /> Log In
+                  </Button>
                 </NavigationMenuLink>
               </NavigationMenuItem>
             )}

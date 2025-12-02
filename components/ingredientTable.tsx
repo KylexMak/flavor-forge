@@ -7,7 +7,7 @@ type Props = {
   className?: string;
 };
 
-function PantryTable(props: Props) {
+function IngredientTable(props: Props) {
   const columns: ColumnDef<Ingredient>[] = [
     {
       header: "Ingredient Name",
@@ -33,4 +33,4 @@ function PantryTable(props: Props) {
   );
 }
 
-export default PantryTable;
+export default IngredientTable;

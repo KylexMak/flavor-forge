@@ -2,14 +2,19 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react"; // This is the magic function!
+import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Card } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import LiquidEther from "@/components/LiquidEther";
-import styles from "./styles.module.css";
 
 export default function LoginPage() {
   // Form state
@@ -53,42 +58,57 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-w-screen min-h-full z-0">
-      <Card className="w-120 max-w-screen p-10 z-10">
-        <h1 className={styles.cardHeader}>Login</h1>
-        <form onSubmit={handleSubmit}>
-          {/* Display an error message if login fails */}
-          {error && <p style={{ color: "red" }}>{error}</p>}
+      <Card className="w-120 max-w-screen z-10">
+        <CardHeader>
+          <CardTitle>Login to your account</CardTitle>
+          <CardDescription>
+            Enter your email below to login to your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit}>
+            {/* Display an error message if login fails */}
+            {error && <p style={{ color: "red" }}>{error}</p>}
 
-          <FieldGroup>
-            <Field>
-              <FieldLabel htmlFor="email">Email</FieldLabel>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                placeholder="Enter email"
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+            <FieldGroup className="gap-4">
+              <Field>
+                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  placeholder="Enter email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  placeholder="Enter password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </Field>
+            </FieldGroup>
+            <Field orientation="horizontal">
+              <Button className="mt-5 w-full" type="submit">
+                Log In
+              </Button>
             </Field>
-            <Field>
-              <FieldLabel htmlFor="password">Password</FieldLabel>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                placeholder="Enter password"
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </Field>
-          </FieldGroup>
-          <Field orientation="horizontal">
-            <Button className="mt-5 w-full" type="submit">
-              Log In
-            </Button>
-          </Field>
-        </form>
+          </form>
+        </CardContent>
+        <CardFooter className="flex justify-center">
+          <p className="text-muted-foreground text-sm">
+            Don't have an account?{" "}
+            <a className="underline" href="#">
+              Sign up
+            </a>
+          </p>
+        </CardFooter>
       </Card>
     </div>
   );
