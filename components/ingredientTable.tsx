@@ -24,7 +24,6 @@ function IngredientTable(props: Props) {
   ];
 
   let className = props.className ? props.className : "";
-  className += " py-10";
 
   return (
     <div className={className}>

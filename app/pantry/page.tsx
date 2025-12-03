@@ -25,7 +25,7 @@ const page = async () => {
         </span>
         <div className="flex flex-col items-center">
           <AddIngredientsForm />
-          <IngredientTable data={data.items} className="w-full" />
+          <IngredientTable data={data.ingredients} className="w-full py-10" />
         </div>
       </div>
     </>
