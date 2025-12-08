@@ -1,33 +1,91 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { SupabaseAdapter } from "@auth/supabase-adapter";
+import { createClient } from "@supabase/supabase-js";
+import bcrypt from "bcryptjs";
+
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (SUPABASE_URL === undefined || SUPABASE_SERVICE_ROLE_KEY === undefined) {
+  throw new Error(
+    "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in environment variables"
+  );
+}
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Email", type: "email" },
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
+      async authorize(credentials) {
+        console.log(credentials);
+        if (!credentials?.email || !credentials?.password) return null;
 
-      async authorize(credentials: any) {
-        if (!credentials.username || !credentials.password) {
-          return null;
+        // A. Fetch the user directly from the Adapter's table
+        // We use the 'next_auth' schema explicitly
+        const { data: user, error } = await supabase
+          .schema("next_auth")
+          .from("users")
+          .select("*")
+          .eq("email", credentials.email)
+          .single();
+
+        if (error || !user || !user.passwordHash) {
+          throw new Error("User not found or password missing");
         }
 
-        if (
-          credentials.username === "test@test.com" &&
-          credentials.password === "password"
-        ) {
-          return { id: "1", name: "Test User", email: "test@test.com" };
-        }
+        // B. Verify Password with Bcrypt
+        const isValid = await bcrypt.compare(
+          credentials.password,
+          user.passwordHash
+        );
 
-        return null;
+        console.log(credentials.password, user.passwordHash, isValid);
+
+        if (!isValid) return null;
+
+        // C. Return user object (NextAuth will put this in the JWT)
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        };
       },
     }),
   ],
+  adapter: SupabaseAdapter({
+    url: SUPABASE_URL,
+    secret: SUPABASE_SERVICE_ROLE_KEY,
+  }),
   pages: {
     signIn: "/login",
+    register: "/register",
+  },
+  callbacks: {
+    async jwt({ token, user }: { token: any; user: any }) {
+      // When a user signs in, add their info to the JWT token
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+      }
+      return token;
+    },
+    async session({ session, token }: { session: any; token: any }) {
+      // Add the JWT data to the session object that gets sent to the client
+      if (session.user) {
+        session.user.id = token.id;
+        session.user.email = token.email;
+        session.user.name = token.name;
+      }
+      return session;
+    },
   },
 };
 

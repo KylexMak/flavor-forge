@@ -36,8 +36,8 @@ export default function LoginPage() {
       const result = await signIn("credentials", {
         // 2. We handle the redirect ourselves
         redirect: false,
-        username: email,
-        password: password,
+        email,
+        password,
         callbackUrl,
       });
 
