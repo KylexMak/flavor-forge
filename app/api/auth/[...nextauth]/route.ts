@@ -1,6 +1,5 @@
-import NextAuth from "next-auth";
+import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { SupabaseAdapter } from "@auth/supabase-adapter";
 import { createClient } from "@supabase/supabase-js";
 import bcrypt from "bcryptjs";
 
@@ -15,7 +14,7 @@ if (SUPABASE_URL === undefined || SUPABASE_SERVICE_ROLE_KEY === undefined) {
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -59,13 +58,12 @@ export const authOptions = {
       },
     }),
   ],
-  adapter: SupabaseAdapter({
-    url: SUPABASE_URL,
-    secret: SUPABASE_SERVICE_ROLE_KEY,
-  }),
   pages: {
     signIn: "/login",
-    register: "/register",
+  },
+  secret: process.env.AUTH_SECRET,
+  session: {
+    strategy: "jwt",
   },
   callbacks: {
     async jwt({ token, user }: { token: any; user: any }) {
