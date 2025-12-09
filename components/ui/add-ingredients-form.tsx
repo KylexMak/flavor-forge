@@ -4,17 +4,47 @@ import React from "react";
 import { Field, FieldLabel } from "./field";
 import { Input } from "./input";
 import { Button } from "./button";
+import { useRouter } from "next/navigation";
 
 function AddIngredientsForm() {
+  const router = useRouter();
   const [ingredientName, setIngredientName] = React.useState("");
   const [quantity, setQuantity] = React.useState("");
   const [unit, setUnit] = React.useState("");
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    fetch("/api/pantry/add", {
-      method: "POST",
-    });
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/pantry/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: ingredientName,
+          quantity: parseFloat(quantity),
+          unit: unit,
+        }),
+      });
+
+      if (response.ok) {
+        // Clear the form
+        setIngredientName("");
+        setQuantity("");
+        setUnit("");
+        
+        // 3. REFRESH THE PAGE DATA
+        // This tells the Server Component (page.tsx) to re-fetch data 
+        // and send the updated list back to the browser.
+        router.refresh(); 
+      } else {
+        console.error("Failed to add ingredient");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -51,7 +81,6 @@ function AddIngredientsForm() {
               value={unit}
               placeholder="Enter unit (e.g. cups, grams)"
               onChange={(e) => setUnit(e.target.value)}
-              required
             />
           </Field>
         </div>

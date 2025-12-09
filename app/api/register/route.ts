@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import bcrypt from "bcryptjs";
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (SUPABASE_URL === undefined || SUPABASE_SERVICE_ROLE_KEY === undefined) {
@@ -56,6 +56,16 @@ export async function POST(request: Request) {
 
     if (error) {
       throw error;
+    }
+
+    const {data: newPantry, error: secondTableError} = await supabase
+        .from("user_pantry")
+        .insert({user_Id: newUser.id})
+        .select()
+        .single();
+
+    if (secondTableError) {
+      throw secondTableError;
     }
 
     return NextResponse.json(newUser);
