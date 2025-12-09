@@ -31,16 +31,22 @@ import {
 type Props = {
   data: Ingredient[];
   className?: string;
+  showActions?: boolean;
 };
 
 function IngredientTable(props: Props) {
+  const showActions = props.showActions ?? true;
   const router = useRouter();
-  
+
   // State for EDITING
-  const [editingIngredient, setEditingIngredient] = useState<Ingredient | null>(null);
-  
+  const [editingIngredient, setEditingIngredient] = useState<Ingredient | null>(
+    null
+  );
+
   // State for DELETING [New]
-  const [ingredientToDelete, setIngredientToDelete] = useState<number | null>(null);
+  const [ingredientToDelete, setIngredientToDelete] = useState<number | null>(
+    null
+  );
 
   // --- SAVE (Edit) ---
   const saveChanges = async () => {
@@ -65,7 +71,7 @@ function IngredientTable(props: Props) {
   };
 
   // --- DELETE LOGIC ---
-  
+
   // 1. User clicks the trash icon -> Opens the popup
   const handleDeleteClick = (ingredientId: number) => {
     setIngredientToDelete(ingredientId);
@@ -76,13 +82,16 @@ function IngredientTable(props: Props) {
     if (!ingredientToDelete) return;
 
     try {
-      const response = await fetch(`/api/pantry/delete?id=${ingredientToDelete}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `/api/pantry/delete?id=${ingredientToDelete}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
         setIngredientToDelete(null); // Close popup
-        router.refresh();            // Refresh table
+        router.refresh(); // Refresh table
       } else {
         console.error("Failed to delete ingredient");
       }
@@ -99,7 +108,10 @@ function IngredientTable(props: Props) {
     { header: "Ingredient Name", accessorKey: "name" },
     { header: "Quantity", accessorKey: "quantity" },
     { header: "Unit", accessorKey: "unit" },
-    {
+  ];
+
+  if (showActions) {
+    columns.push({
       id: "actions",
       header: "Actions",
       cell: ({ row }) => {
@@ -121,8 +133,8 @@ function IngredientTable(props: Props) {
           </div>
         );
       },
-    },
-  ];
+    });
+  }
 
   const className = props.className ? props.className : "";
 
@@ -131,8 +143,8 @@ function IngredientTable(props: Props) {
       <DataTable columns={columns} data={props.data} />
 
       {/* --- EDIT DIALOG --- */}
-      <Dialog 
-        open={!!editingIngredient} 
+      <Dialog
+        open={!!editingIngredient}
         onOpenChange={(open) => {
           if (!open) setEditingIngredient(null);
         }}
@@ -156,14 +168,19 @@ function IngredientTable(props: Props) {
                   type="text"
                   value={editingIngredient.name}
                   onChange={(e) =>
-                    setEditingIngredient({ ...editingIngredient, name: e.target.value })
+                    setEditingIngredient({
+                      ...editingIngredient,
+                      name: e.target.value,
+                    })
                   }
                   className="border p-2 w-full rounded"
                 />
               </div>
               <div className="flex gap-2">
                 <div className="w-1/2">
-                  <label className="block text-sm font-medium mb-1">Quantity</label>
+                  <label className="block text-sm font-medium mb-1">
+                    Quantity
+                  </label>
                   <input
                     type="number"
                     value={editingIngredient.quantity}
@@ -182,7 +199,10 @@ function IngredientTable(props: Props) {
                     type="text"
                     value={editingIngredient.unit}
                     onChange={(e) =>
-                      setEditingIngredient({ ...editingIngredient, unit: e.target.value })
+                      setEditingIngredient({
+                        ...editingIngredient,
+                        unit: e.target.value,
+                      })
                     }
                     className="border p-2 w-full rounded"
                   />
@@ -210,26 +230,29 @@ function IngredientTable(props: Props) {
       </Dialog>
 
       {/* --- DELETE CONFIRMATION ALERT DIALOG --- */}
-      <AlertDialog open={!!ingredientToDelete} onOpenChange={() => setIngredientToDelete(null)}>
+      <AlertDialog
+        open={!!ingredientToDelete}
+        onOpenChange={() => setIngredientToDelete(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this ingredient from your pantry.
+              This action cannot be undone. This will permanently delete this
+              ingredient from your pantry.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction 
-                onClick={confirmDelete}
-                className="bg-red-600 hover:bg-red-700 text-white"
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-red-600 hover:bg-red-700 text-white"
             >
-                Delete
+              Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
     </div>
   );
 }
