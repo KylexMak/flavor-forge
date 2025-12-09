@@ -45,22 +45,7 @@ export async function PATCH(req: Request) {
     const body = await req.json();
     console.log("Request Body:", body);
     // Note: The frontend sends 'id' which is actually the ingredient_id
-    const { name, quantity, unit } = body; 
-
-    const { data: ingredient, error: ingredientError } = await supabase
-        .from("user_pantry_ingredient")
-        .select(`
-            ingredient_id,
-            ingredient!inner ( name )
-        `)
-        .eq("amount", quantity)                  // Filter 1: Amount in the main table
-        .eq("ingredient.name", name)   // Filter 2: Name in the related table
-        // .eq("user_pantry_id", pantryId) // You likely want to include this too!
-        .single();
-
-    if (!ingredient) {
-       return NextResponse.json({ error: "Ingredient ID is required" }, { status: 400 });
-    }
+    const { id, name, quantity, unit } = body; 
 
     // 5. Update the specific row
     // We match on BOTH user_pantry_id AND ingredient_id
@@ -72,7 +57,7 @@ export async function PATCH(req: Request) {
         unit: unit,
       })
       .eq("user_pantry_id", pantryData.id) 
-      .eq("ingredient_id", ingredient.ingredient_id);
+      .eq("ingredient_id", id);
 
     if (error) {
       console.error("Supabase Update Error:", error);

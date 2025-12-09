@@ -24,7 +24,7 @@ export default function LoginPage() {
 
   const router = useRouter(); // To redirect after login
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const callbackUrl = searchParams.get("callbackUrl") || "/pantry";
 
   // This function will be called when the form is submitted
   const handleSubmit = async (e: React.FormEvent) => {
