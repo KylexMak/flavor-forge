@@ -38,5 +38,5 @@ We asked AI for help with these things:
 ### Kyle Mak
 I was interested in the project, mainly due to its direct application to me. I would always come home, open the fridge, and wonder what I should make for dinner. It would take forever to decide on what to make and some of the time, I would not have all the neccessary ingredients. This project would be the answer to that issue. It would allow me to be able to find recipes that I already had all the ingredients for. I would no longer have to wonder about what I should make for dinner. Also, learning a new framwork that used react was something on my todo list.
 
-## Bed Madsen
+## Ben Madsen
 I thought this was interesting because of how easy it was to create an application with an appealing user interface, reasonable UX (capable of adjusting to different devices), and able to run in a scalable environment. It helped me understand how people are able to test out SaaS business ideas without significant time commitment. The idea of being able to quickly find recipes based on ingredients I normally have on hand was also just a product I would personally like to have.
